@@ -1,8 +1,35 @@
-import React from "react";
+import React, { useEffect, useState } from 'react';
+import axios from 'axios'; // Added axios import
+import { useSelector, useDispatch } from 'react-redux';
+import { addToCart } from '../redux/slices/cartSlice';
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 
 const Home = () => {
+  const [products, setProducts] = useState([]);
+  const user = useSelector((state) => state.user); // Fetch user data from Redux
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    // Fetch products data using axios
+    const fetchProducts = async () => {
+      try {
+        const response = await axios.get('http://localhost:3000/api/data'); // fetching all products
+        setProducts(response.data);
+      } catch (error) {
+        console.error('Error fetching products:', error);
+      }
+    };
+
+    fetchProducts();
+  }, []);
+
+  const handleAddToCart = (productId) => {
+    const userId = user?.userInfo?.id; // Replace with actual logged-in user ID
+    console.log('Adding Product to Cart:', { userId, productId }); // Debug log
+    dispatch(addToCart({ userId, productId, quantity: 1 }));
+  };
+
   return (
     <div className="flex flex-col min-h-screen">
       {/* Navbar */}
@@ -16,49 +43,21 @@ const Home = () => {
             Discover the best products at unbeatable prices. Shop now and enjoy exclusive deals!
           </p>
 
-          {/* Example Product Section */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-8">
-            {/* Product 1 */}
-            <div className="bg-white p-4 rounded shadow">
-              <img
-                src="https://via.placeholder.com/150"
-                alt="Product 1"
-                className="w-full h-48 object-cover rounded"
-              />
-              <h3 className="text-lg font-semibold mt-4">Product 1</h3>
-              <p className="text-gray-600 mt-2">$20.00</p>
-              <button className="mt-4 bg-blue-600 text-white py-2 px-4 rounded hover:bg-blue-700">
-                Add to Cart
-              </button>
-            </div>
-
-            {/* Product 2 */}
-            <div className="bg-white p-4 rounded shadow">
-              <img
-                src="https://via.placeholder.com/150"
-                alt="Product 2"
-                className="w-full h-48 object-cover rounded"
-              />
-              <h3 className="text-lg font-semibold mt-4">Product 2</h3>
-              <p className="text-gray-600 mt-2">$30.00</p>
-              <button className="mt-4 bg-blue-600 text-white py-2 px-4 rounded hover:bg-blue-700">
-                Add to Cart
-              </button>
-            </div>
-
-            {/* Product 3 */}
-            <div className="bg-white p-4 rounded shadow">
-              <img
-                src="https://via.placeholder.com/150"
-                alt="Product 3"
-                className="w-full h-48 object-cover rounded"
-              />
-              <h3 className="text-lg font-semibold mt-4">Product 3</h3>
-              <p className="text-gray-600 mt-2">$40.00</p>
-              <button className="mt-4 bg-blue-600 text-white py-2 px-4 rounded hover:bg-blue-700">
-                Add to Cart
-              </button>
-            </div>
+          {/* Products Section */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 mt-8">
+            {products.map((product) => (
+              <div key={product.id} className="bg-white p-4 rounded shadow">
+                <img src={product.image} alt={product.name} className="w-full h-48 object-cover rounded mb-2" />
+                <h2 className="text-lg font-semibold">{product.name}</h2>
+                <p className="text-gray-600">${product.price}</p>
+                <button
+                  onClick={() => handleAddToCart(product.id)}
+                  className="mt-2 bg-blue-500 text-white px-4 py-2 rounded"
+                >
+                  Add to Cart
+                </button>
+              </div>
+            ))}
           </div>
         </div>
       </main>
