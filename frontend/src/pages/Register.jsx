@@ -1,4 +1,8 @@
 import React, { useState } from "react";
+import { useDispatch } from "react-redux";
+import { setUser } from "../redux/slices/userSlice";
+import { useNavigate } from "react-router-dom";
+import axios from "axios"; // Import Axios
 
 const Register = () => {
   const [formData, setFormData] = useState({
@@ -7,26 +11,46 @@ const Register = () => {
     password: "",
     confirmPassword: "",
   });
+  const [error, setError] = useState(null); // State to handle errors
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     if (formData.password !== formData.confirmPassword) {
       alert("Passwords do not match!");
       return;
     }
-    console.log("User Registered:", formData);
-    // Add your registration logic here (e.g., API call)
+
+    try {
+      console.log("Entered handleSubmit function"); // Debugging line
+      const response = await axios.post("http://localhost:3000/api/auth/register", {
+        name: formData.name,
+        email: formData.email,
+        password: formData.password,
+      });
+
+      // Dispatch user data to Redux store
+      dispatch(setUser({ name: response.data.name, email: response.data.email }));
+
+      alert("Registration successful!");
+      navigate("/login"); // Redirect to login page after successful registration
+    } catch (err) {
+      console.error("Error during registration:", err.response || err);
+      setError(err.response?.data?.message || "Failed to register");
+    }
   };
 
   return (
     <div className="flex items-center justify-center min-h-screen bg-gray-100">
       <div className="bg-white p-8 rounded shadow-md w-full max-w-md">
         <h2 className="text-2xl font-bold mb-6 text-center">Register</h2>
+        {error && <p className="text-red-600 text-center mb-4">{error}</p>}
         <form onSubmit={handleSubmit}>
           {/* Name Field */}
           <div className="mb-4">
