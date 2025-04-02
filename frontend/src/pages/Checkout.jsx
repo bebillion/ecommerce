@@ -1,25 +1,12 @@
 import React, { useState } from "react";
+import { useSelector } from "react-redux";
+import axios from "axios"; // Add axios import
 
 const Checkout = () => {
   const [address, setAddress] = useState("");
   const [submittedAddress, setSubmittedAddress] = useState("");
   const [coupon, setCoupon] = useState("");
-  const [cartItems, setCartItems] = useState([
-    {
-      id: 1,
-      name: "Product 1",
-      price: 20.0,
-      quantity: 1,
-      image: "https://via.placeholder.com/150",
-    },
-    {
-      id: 2,
-      name: "Product 2",
-      price: 30.0,
-      quantity: 2,
-      image: "https://via.placeholder.com/150",
-    },
-  ]);
+  const cartItems = useSelector((state) => state.cart.items); // Fetch cart items from Redux
 
   const handleAddressSubmit = (e) => {
     e.preventDefault();
@@ -30,11 +17,28 @@ const Checkout = () => {
     return cartItems.reduce((total, item) => total + item.price * item.quantity, 0).toFixed(2);
   };
 
-  const handlePlaceOrder = () => {
-    console.log("Order placed with address:", submittedAddress);
-    console.log("Cart items:", cartItems);
-    console.log("Coupon applied:", coupon);
-    alert("Order placed successfully!");
+  const handlePlaceOrder = async () => {
+    try {
+      const userId = 1; // Replace with actual logged-in user ID
+      const order = {
+        address: submittedAddress,
+        items: cartItems,
+        total: calculateTotal(),
+        coupon,
+        date: new Date().toISOString(),
+      };
+
+      const response = await axios.post("http://localhost:3000/api/orders/save", {
+        userId,
+        order,
+      });
+
+      console.log("Order saved:", response.data);
+      alert("Order placed successfully!");
+    } catch (error) {
+      console.error("Error saving order:", error);
+      alert("Failed to place order. Please try again.");
+    }
   };
 
   return (
@@ -73,7 +77,7 @@ const Checkout = () => {
         <div className="mb-6">
           <h2 className="text-lg font-semibold mb-4">Your Cart</h2>
           {cartItems.map((item) => (
-            <div key={item.id} className="flex items-center justify-between mb-4">
+            <div key={item.productId} className="flex items-center justify-between mb-4">
               <img
                 src={item.image}
                 alt={item.name}
