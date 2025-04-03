@@ -7,7 +7,7 @@ const Orders = () => {
   useEffect(() => {
     const fetchOrders = async () => {
       try {
-        const userId = 1; // Replace with actual logged-in user ID
+        const userId = 1; // tetsing with a static userId, replace with dynamic userId as needed
         const response = await axios.get(`http://localhost:3000/api/orders/${userId}`);
         setOrders(response.data);
       } catch (error) {
