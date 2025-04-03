@@ -1,0 +1,142 @@
+[
+  {
+    "id": 1,
+    "name": "Gaming Laptop",
+    "price": 1299.99,
+    "image": "https://via.placeholder.com/150?text=Gaming+Laptop",
+    "description": "A high-performance laptop designed for gaming enthusiasts."
+  },
+  {
+    "id": 2,
+    "name": "Ultrabook Laptop",
+    "price": 999.99,
+    "image": "https://via.placeholder.com/150?text=Ultrabook+Laptop",
+    "description": "A sleek and lightweight laptop for professionals on the go."
+  },
+  {
+    "id": 3,
+    "name": "Budget Laptop",
+    "price": 499.99,
+    "image": "https://via.placeholder.com/150?text=Budget+Laptop",
+    "description": "An affordable laptop suitable for everyday tasks."
+  },
+  {
+    "id": 4,
+    "name": "2-in-1 Convertible Laptop",
+    "price": 799.99,
+    "image": "https://via.placeholder.com/150?text=Convertible+Laptop",
+    "description": "A versatile laptop that doubles as a tablet."
+  },
+  {
+    "id": 5,
+    "name": "Workstation Laptop",
+    "price": 1499.99,
+    "image": "https://via.placeholder.com/150?text=Workstation+Laptop",
+    "description": "A powerful laptop for heavy-duty professional workloads."
+  },
+  {
+    "id": 6,
+    "name": "Men's T-Shirt",
+    "price": 19.99,
+    "image": "https://via.placeholder.com/150?text=Men's+T-Shirt",
+    "description": "A comfortable and stylish t-shirt for men."
+  },
+  {
+    "id": 7,
+    "name": "Women's Jeans",
+    "price": 49.99,
+    "image": "https://via.placeholder.com/150?text=Women's+Jeans",
+    "description": "High-quality denim jeans for women."
+  },
+  {
+    "id": 8,
+    "name": "Hoodie",
+    "price": 39.99,
+    "image": "https://via.placeholder.com/150?text=Hoodie",
+    "description": "A cozy hoodie perfect for casual wear."
+  },
+  {
+    "id": 9,
+    "name": "Summer Dress",
+    "price": 59.99,
+    "image": "https://via.placeholder.com/150?text=Summer+Dress",
+    "description": "A lightweight and elegant summer dress."
+  },
+  {
+    "id": 10,
+    "name": "Sports Jacket",
+    "price": 89.99,
+    "image": "https://via.placeholder.com/150?text=Sports+Jacket",
+    "description": "A durable jacket designed for outdoor activities."
+  },
+  {
+    "id": 11,
+    "name": "Microwave Oven",
+    "price": 129.99,
+    "image": "https://via.placeholder.com/150?text=Microwave+Oven",
+    "description": "A compact microwave oven for quick and easy cooking."
+  },
+  {
+    "id": 12,
+    "name": "Refrigerator",
+    "price": 599.99,
+    "image": "https://via.placeholder.com/150?text=Refrigerator",
+    "description": "A spacious and energy-efficient refrigerator."
+  },
+  {
+    "id": 13,
+    "name": "Washing Machine",
+    "price": 399.99,
+    "image": "https://via.placeholder.com/150?text=Washing+Machine",
+    "description": "A reliable washing machine with multiple wash settings."
+  },
+  {
+    "id": 14,
+    "name": "Air Conditioner",
+    "price": 699.99,
+    "image": "https://via.placeholder.com/150?text=Air+Conditioner",
+    "description": "A powerful air conditioner for cooling large spaces."
+  },
+  {
+    "id": 15,
+    "name": "Vacuum Cleaner",
+    "price": 199.99,
+    "image": "https://via.placeholder.com/150?text=Vacuum+Cleaner",
+    "description": "A lightweight vacuum cleaner for efficient cleaning."
+  },
+  {
+    "id": 16,
+    "name": "Football Kit",
+    "price": 49.99,
+    "image": "https://via.placeholder.com/150?text=Football+Kit",
+    "description": "A complete football kit for players of all levels."
+  },
+  {
+    "id": 17,
+    "name": "Tennis Racket",
+    "price": 79.99,
+    "image": "https://via.placeholder.com/150?text=Tennis+Racket",
+    "description": "A high-quality tennis racket for competitive play."
+  },
+  {
+    "id": 18,
+    "name": "Basketball",
+    "price": 29.99,
+    "image": "https://via.placeholder.com/150?text=Basketball",
+    "description": "A durable basketball suitable for indoor and outdoor use."
+  },
+  {
+    "id": 19,
+    "name": "Cricket Bat",
+    "price": 99.99,
+    "image": "https://via.placeholder.com/150?text=Cricket+Bat",
+    "description": "A premium cricket bat for professional players."
+  },
+  {
+    "id": 20,
+    "name": "Yoga Mat",
+    "price": 24.99,
+    "image": "https://via.placeholder.com/150?text=Yoga+Mat",
+    "description": "A non-slip yoga mat for comfortable workouts."
+  }
+]

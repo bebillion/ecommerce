@@ -21,10 +21,20 @@ const Admin = () => {
     fetchReport();
   }, []);
 
-  const handleGenerateDiscountCode = () => {
-    const discountCode = `DISCOUNT${Math.floor(Math.random() * 10000)}`;
-    setNewDiscountCode(discountCode);
-    alert(`New Discount Code Generated: ${discountCode}`);
+  const handleGenerateDiscountCode = async (userId) => {
+    try {
+      const token = localStorage.getItem("token");
+      const { data } = await axios.post(
+        "/api/admin/generate-discount",
+        { userId },
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
+      setNewDiscountCode(data.discountCode);
+      alert(`New Discount Code Generated: ${data.discountCode}`);
+    } catch (error) {
+      console.error("Error generating discount code:", error);
+      alert("Failed to generate discount code.");
+    }
   };
 
   return (
@@ -51,12 +61,37 @@ const Admin = () => {
             </div>
 
             <div className="mb-6">
-              <h2 className="text-lg font-semibold">Discount Codes</h2>
-              <ul className="list-disc pl-6">
-                {report.discountCodes?.map((code, index) => (
-                  <li key={index}>{code}</li>
-                ))}
-              </ul>
+              <h2 className="text-lg font-semibold">User-Specific Data</h2>
+              {report.users?.map((user) => (
+                <div key={user.id} className="mb-4 p-4 border rounded">
+                  <p>
+                    <strong>User:</strong> {user.name} ({user.email})
+                  </p>
+                  <p>Total Items Purchased: {user.totalItems || 0}</p>
+                  <p>
+                    Total Purchase Amount: $
+                    {user.totalAmount ? user.totalAmount.toFixed(2) : "0.00"}
+                  </p>
+                  <p>Total Discount Codes: {user.discountCodes?.length || 0}</p>
+                  <p>
+                    Total Discount Amount: $
+                    {user.discountCodes
+                      ? (user.discountCodes.length * 10).toFixed(2)
+                      : "0.00"}
+                  </p>
+                  <ul className="list-disc pl-6">
+                    {user.discountCodes?.map((code, index) => (
+                      <li key={index}>{code}</li>
+                    ))}
+                  </ul>
+                  <button
+                    onClick={() => handleGenerateDiscountCode(user.id)}
+                    className="bg-blue-600 text-white py-2 px-4 rounded hover:bg-blue-700 transition mt-2"
+                  >
+                    Generate Discount Code
+                  </button>
+                </div>
+              ))}
             </div>
 
             <div className="text-center">

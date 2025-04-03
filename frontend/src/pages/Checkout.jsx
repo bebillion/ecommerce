@@ -7,6 +7,7 @@ const Checkout = () => {
   const [submittedAddress, setSubmittedAddress] = useState("");
   const [coupon, setCoupon] = useState("");
   const cartItems = useSelector((state) => state.cart.items); // Fetch cart items from Redux
+  const userId = useSelector((state) => state.user.userInfo?.id); // Fetch userId from Redux
 
   const handleAddressSubmit = (e) => {
     e.preventDefault();
@@ -19,7 +20,6 @@ const Checkout = () => {
 
   const handlePlaceOrder = async () => {
     try {
-      const userId = 1; // Replace with actual logged-in user ID
       const order = {
         address: submittedAddress,
         items: cartItems,

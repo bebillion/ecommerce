@@ -36,19 +36,39 @@ export const syncCart = createAsyncThunk(
   }
 );
 
+const loadCartFromLocalStorage = () => {
+  try {
+    const serializedCart = localStorage.getItem('cart');
+    return serializedCart ? JSON.parse(serializedCart) : [];
+  } catch (error) {
+    console.error('Failed to load cart from local storage:', error);
+    return [];
+  }
+};
+
+const saveCartToLocalStorage = (cart) => {
+  try {
+    localStorage.setItem('cart', JSON.stringify(cart));
+  } catch (error) {
+    console.error('Failed to save cart to local storage:', error);
+  }
+};
+
 const cartSlice = createSlice({
   name: 'cart',
   initialState: {
-    items: [],
+    items: loadCartFromLocalStorage(), // Load cart from local storage
     status: 'idle',
     error: null,
   },
   reducers: {
     updateCart(state, action) {
       state.items = action.payload; // Update cart items directly
+      saveCartToLocalStorage(state.items); // Save to local storage
     },
     setCart(state, action) { // Add a new reducer to set the cart
       state.items = action.payload;
+      saveCartToLocalStorage(state.items); // Save to local storage
     },
   },
   extraReducers: (builder) => {
@@ -59,6 +79,7 @@ const cartSlice = createSlice({
       .addCase(addToCart.fulfilled, (state, action) => {
         state.status = 'succeeded';
         state.items = action.payload; // Update cart items with the response
+        saveCartToLocalStorage(state.items); // Save to local storage
       })
       .addCase(addToCart.rejected, (state, action) => {
         state.status = 'failed';
@@ -66,6 +87,7 @@ const cartSlice = createSlice({
       })
       .addCase(syncCart.fulfilled, (state, action) => {
         state.items = action.payload; // Update cart items with the response
+        saveCartToLocalStorage(state.items); // Save to local storage
       });
   },
 });

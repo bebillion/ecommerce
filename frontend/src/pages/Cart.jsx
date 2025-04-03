@@ -1,48 +1,46 @@
-import React, { useState } from "react";
+import React, { useEffect } from "react";
+import { useSelector, useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
+import { updateCart, syncCart } from "../redux/slices/cartSlice"; // Import necessary actions
 
 const Cart = () => {
-  const [cartItems, setCartItems] = useState([
-    {
-      id: 1,
-      name: "Product 1",
-      price: 20.0,
-      quantity: 1,
-      image: "https://via.placeholder.com/150",
-    },
-    {
-      id: 2,
-      name: "Product 2",
-      price: 30.0,
-      quantity: 2,
-      image: "https://via.placeholder.com/150",
-    },
-  ]);
-
+  const cartItems = useSelector((state) => state.cart.items); // Fetch cart items from Redux
   const navigate = useNavigate();
+  const dispatch = useDispatch(); // Initialize dispatch
 
-  const handleQuantityChange = (id, delta) => {
-    setCartItems((prevItems) =>
-      prevItems.map((item) =>
-        item.id === id
-          ? { ...item, quantity: Math.max(1, item.quantity + delta) }
-          : item
-      )
-    );
-  };
-
-  const handleRemoveItem = (id) => {
-    setCartItems((prevItems) => prevItems.filter((item) => item.id !== id));
-  };
+  useEffect(() => {
+    console.log("Cart Items in Cart Page:", cartItems); // Debug log
+  }, [cartItems]);
 
   const calculateTotal = () => {
-    return cartItems.reduce((total, item) => total + item.price * item.quantity, 0).toFixed(2);
+    return cartItems
+      .reduce((total, item) => total + item.quantity * item.price, 0)
+      .toFixed(2);
   };
 
   const handleProceedToCheckout = () => {
     navigate("/checkout"); // Navigate to the Checkout page
   };
 
+  const handleIncreaseQuantity = (productId) => {
+    const updatedCart = cartItems.map((item) =>
+      item.productId === productId ? { ...item, quantity: item.quantity + 1 } : item
+    );
+    dispatch(updateCart(updatedCart)); // Update cart in Redux
+    dispatch(syncCart({ userId: 1, cart: updatedCart })); // Sync with backend
+  };
+
+  const handleDecreaseQuantity = (productId) => {
+    const updatedCart = cartItems
+      .map((item) =>
+        item.productId === productId && item.quantity > 1
+          ? { ...item, quantity: item.quantity - 1 }
+          : item
+      )
+      .filter((item) => item.quantity > 0); // Remove items with quantity 0
+    dispatch(updateCart(updatedCart)); // Update cart in Redux
+    dispatch(syncCart({ userId: 1, cart: updatedCart })); // Sync with backend
+  };
 
   return (
     <div className="min-h-screen bg-gray-100 p-6">
@@ -57,7 +55,7 @@ const Cart = () => {
             <div className="md:col-span-2">
               {cartItems.map((item) => (
                 <div
-                  key={item.id}
+                  key={item.productId}
                   className="flex items-center justify-between bg-white p-4 rounded shadow mb-4"
                 >
                   <img
@@ -71,25 +69,19 @@ const Cart = () => {
                   </div>
                   <div className="flex items-center">
                     <button
-                      onClick={() => handleQuantityChange(item.id, -1)}
-                      className="px-2 py-1 bg-gray-300 rounded hover:bg-gray-400"
+                      onClick={() => handleDecreaseQuantity(item.productId)}
+                      className="px-2 py-1 bg-gray-300 rounded"
                     >
                       -
                     </button>
                     <span className="mx-2">{item.quantity}</span>
                     <button
-                      onClick={() => handleQuantityChange(item.id, 1)}
-                      className="px-2 py-1 bg-gray-300 rounded hover:bg-gray-400"
+                      onClick={() => handleIncreaseQuantity(item.productId)}
+                      className="px-2 py-1 bg-gray-300 rounded"
                     >
                       +
                     </button>
                   </div>
-                  <button
-                    onClick={() => handleRemoveItem(item.id)}
-                    className="ml-4 text-red-600 hover:underline"
-                  >
-                    Remove
-                  </button>
                 </div>
               ))}
             </div>
@@ -109,9 +101,9 @@ const Cart = () => {
                 <span>Total</span>
                 <span>${(parseFloat(calculateTotal()) + 5).toFixed(2)}</span>
               </div>
-              <button 
-              onClick={handleProceedToCheckout}
-              className="w-full mt-4 bg-blue-600 text-white py-2 px-4 rounded hover:bg-blue-700"
+              <button
+                onClick={handleProceedToCheckout}
+                className="w-full mt-4 bg-blue-600 text-white py-2 px-4 rounded hover:bg-blue-700"
               >
                 Proceed to Checkout
               </button>

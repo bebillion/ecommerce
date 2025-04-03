@@ -25,7 +25,7 @@ const Home = () => {
   }, []);
 
   const handleAddToCart = (productId) => {
-    const userId = user?.userInfo?.id; // Replace with actual logged-in user ID
+    const userId = user?.userInfo?.id; 
     console.log('Adding Product to Cart:', { userId, productId }); // Debug log
     dispatch(addToCart({ userId, productId, quantity: 1 }));
   };
@@ -38,18 +38,13 @@ const Home = () => {
       {/* Main Content */}
       <main className="flex-grow bg-gray-100 p-6">
         <div className="container mx-auto">
-          <h1 className="text-3xl font-bold mb-6 text-center">Welcome to E-Commerce</h1>
-          <p className="text-lg text-gray-700 text-center">
-            Discover the best products at unbeatable prices. Shop now and enjoy exclusive deals!
-          </p>
-
-          {/* Products Section */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 mt-8">
+          <h1 className="text-3xl font-bold mb-6 text-center">Our Products</h1>
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
             {products.map((product) => (
               <div key={product.id} className="bg-white p-4 rounded shadow">
                 <img src={product.image} alt={product.name} className="w-full h-48 object-cover rounded mb-2" />
                 <h2 className="text-lg font-semibold">{product.name}</h2>
-                <p className="text-gray-600">${product.price}</p>
+                <p className="text-gray-600">${product.price.toFixed(2)}</p>
                 <button
                   onClick={() => handleAddToCart(product.id)}
                   className="mt-2 bg-blue-500 text-white px-4 py-2 rounded"

@@ -23,6 +23,7 @@ const Login = () => {
     try {
       const response = await axios.post("http://localhost:3000/api/auth/login", formData);
       localStorage.setItem("token", response.data.token); // Save token to localStorage
+      localStorage.setItem("isAdmin", response.data.email === "admin@example.com"); // Set admin user in local storage
       dispatch(setUser(response.data)); // Dispatch the setUser action with user data
       alert("Login successful!");
       console.log("User data:", response.data); // Log user data for debugging
